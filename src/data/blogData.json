@@ -1,0 +1,46 @@
+{
+    "featuredPost": {
+        "category": "B2B Growth",
+        "title": "Structure → Systems → Sales → Scale: The Framework That Grew Our Revenue by 30%",
+        "excerpt": "Most agencies treat growth as a sales problem. It's not. It's a structure problem. Here's the exact 4-step framework I used to transform chaotic agencies into globally scalable machines — and how you can apply it to your business starting this week.",
+        "meta": "Munish Kumar · February 2025 · 8 min read"
+    },
+    "posts": [
+        {
+            "title": "Why Your Agency is Stuck: The 5 Structural Problems Killing Your Growth",
+            "category": "Agency Scaling",
+            "time": "6 min read",
+            "hook": "Talent isn't the problem. Most agencies plateau because of five invisible structural issues that compound over time. In this article, I break down exactly what they are — and the specific fix for each one."
+        },
+        {
+            "title": "How to Build a Predictable International Revenue Pipeline from Scratch",
+            "category": "B2B Growth",
+            "time": "7 min read",
+            "hook": "International expansion sounds risky and complex. It doesn't have to be. Here's the exact framework I use to help agencies enter new global markets — from USA to GCC to APAC — without chaos."
+        },
+        {
+            "title": "LinkedIn Lead Generation: The Exact System I Use to Generate B2B Leads Every Week",
+            "category": "Marketing",
+            "time": "5 min read",
+            "hook": "LinkedIn is the most underutilized B2B sales tool for agency founders. Most people post content and hope. I use a system. Here's exactly what it looks like — step by step."
+        },
+        {
+            "title": "CRM Implementation Done Right: Stop Losing Deals to Disorganized Pipelines",
+            "category": "Operations",
+            "time": "6 min read",
+            "hook": "A CRM won't fix chaos. A CRM installed inside a structured system will. Most agencies waste money on CRM tools they never use properly. Here's how to implement one that actually drives revenue."
+        },
+        {
+            "title": "How I Built and Scaled a 150+ Member Global Team Without Burning Out",
+            "category": "Leadership",
+            "time": "9 min read",
+            "hook": "Scaling a team is easy. Scaling culture across time zones, languages, and markets is the hard part. Here's my full playbook for building high-performance global teams that don't require you to micromanage every detail."
+        },
+        {
+            "title": "Entering GCC, APAC & Western Markets: What Nobody Tells You",
+            "category": "International Business",
+            "time": "7 min read",
+            "hook": "Every market is different. The frameworks that work in Bahrain won't automatically work in the USA. The positioning that resonates in Europe won't land the same way in APAC. Here's what I've learned from operating across all four."
+        }
+    ]
+}
