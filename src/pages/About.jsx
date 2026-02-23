@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import BottomCTA from '../components/home/BottomCTA';
 import { FaCheckCircle, FaAward, FaGlobe, FaCogs, FaHandshake, FaBullseye } from 'react-icons/fa';
+import SEO from '../components/ui/SEO';
 
 const About = () => {
     const values = [
@@ -55,6 +56,11 @@ const About = () => {
 
     return (
         <div className="w-full relative bg-[#050506]">
+            <SEO
+                title="About Munish Kumar | International Business Advisor & Growth Strategist"
+                description="Learn about Munish Kumar's journey building and scaling 150+ member global teams and expanding digital agencies across Bahrain, USA, UK, UAE, and APAC."
+                canonicalUrl="https://munishkumar.com/about"
+            />
             {/* Page Hero */}
             <section className="pt-40 pb-20 bg-[#0A0A0C] relative border-b border-[#d4af37]/10 overflow-hidden">
                 <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-bl from-[#d4af37]/10 to-transparent rounded-full blur-[120px] pointer-events-none" />

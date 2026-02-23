@@ -2,6 +2,9 @@ import { useState } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { FaArrowLeft, FaSave, FaStar } from 'react-icons/fa';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+import slugify from 'slugify';
 import { getBlogPosts } from '../../utils/blogStorage';
 
 const STORAGE_KEY = 'mk_blog_posts';
@@ -21,7 +24,7 @@ const AdminBlogEditor = () => {
             const post = posts[parseInt(id)];
             if (post) return { ...post, setAsFeatured: false };
         }
-        return { title: '', category: 'B2B Growth', time: '5 min read', hook: '', setAsFeatured: false };
+        return { title: '', category: 'B2B Growth', time: '5 min read', hook: '', content: '', slug: '', setAsFeatured: false };
     });
     const [saved, setSaved] = useState(false);
 
@@ -30,10 +33,27 @@ const AdminBlogEditor = () => {
         setForm(prev => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
     };
 
+    const handleContentChange = (content) => {
+        setForm(prev => ({ ...prev, content }));
+    };
+
     const handleSave = (e) => {
         e.preventDefault();
         const posts = getBlogPosts();
-        const postData = { title: form.title, category: form.category, time: form.time, hook: form.hook };
+
+        let postSlug = form.slug;
+        if (!isEditing || !postSlug) {
+            postSlug = slugify(form.title, { lower: true, strict: true });
+        }
+
+        const postData = {
+            title: form.title,
+            category: form.category,
+            time: form.time,
+            hook: form.hook,
+            content: form.content,
+            slug: postSlug
+        };
 
         let updatedPosts;
         if (isEditing) {
@@ -126,14 +146,70 @@ const AdminBlogEditor = () => {
                             <textarea
                                 name="hook"
                                 required
-                                rows="5"
+                                rows="3"
                                 value={form.hook}
                                 onChange={handleChange}
                                 placeholder="Write a compelling hook that makes readers want to click and read more..."
-                                className="w-full bg-[#111115] border border-gray-800 text-white rounded-xl px-5 py-4 focus:outline-none focus:border-[#d4af37] transition-colors resize-y min-h-[130px] text-base leading-relaxed"
+                                className="w-full bg-[#111115] border border-gray-800 text-white rounded-xl px-5 py-4 focus:outline-none focus:border-[#d4af37] transition-colors resize-y min-h-[90px] text-base leading-relaxed"
                             />
-                            <p className="text-gray-600 text-xs">{form.hook.length} characters</p>
+                            <p className="text-gray-600 text-xs">{form.hook?.length || 0} characters</p>
                         </div>
+                    </div>
+
+                    {/* Rich Text Editor */}
+                    <div className="bg-[#0a0a0c] border border-white/5 rounded-2xl p-8 space-y-6">
+                        <h2 className="text-white font-bold text-lg flex items-center gap-2">
+                            <span className="w-6 h-6 rounded bg-[#d4af37]/20 text-[#d4af37] text-xs flex items-center justify-center font-bold">3</span>
+                            Full Article Content
+                        </h2>
+
+                        <div className="prose-editor-container">
+                            <ReactQuill
+                                theme="snow"
+                                value={form.content}
+                                onChange={handleContentChange}
+                                className="bg-[#111115] text-white rounded-xl border border-gray-800 focus-within:border-[#d4af37] transition-colors"
+                                placeholder="Start writing your masterpiece..."
+                                modules={{
+                                    toolbar: [
+                                        [{ 'header': [2, 3, false] }],
+                                        ['bold', 'italic', 'underline', 'strike'],
+                                        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                                        ['link', 'blockquote'],
+                                        ['clean']
+                                    ]
+                                }}
+                            />
+                        </div>
+                        <style>{`
+                            .prose-editor-container .ql-toolbar {
+                                border: none;
+                                border-bottom: 1px solid #1f2937;
+                                border-top-left-radius: 0.75rem;
+                                border-top-right-radius: 0.75rem;
+                                background-color: #050506;
+                            }
+                            .prose-editor-container .ql-container {
+                                border: none;
+                                min-height: 400px;
+                                font-size: 1.125rem;
+                            }
+                            .prose-editor-container .ql-stroke { stroke: #9ca3af; }
+                            .prose-editor-container .ql-fill { fill: #9ca3af; }
+                            .prose-editor-container .ql-picker-label { color: #9ca3af; }
+                            .prose-editor-container .ql-picker-options { background-color: #111115; border: 1px solid #1f2937; }
+                            .prose-editor-container .ql-picker-item { color: #9ca3af; }
+                            .prose-editor-container .ql-picker-item:hover { color: #d4af37; }
+                            .prose-editor-container button:hover .ql-stroke { stroke: #d4af37; }
+                            .prose-editor-container button:hover .ql-fill { fill: #d4af37; }
+                            .prose-editor-container .ql-editor p { margin-bottom: 1.5rem; line-height: 1.8; color: #e5e7eb; }
+                            .prose-editor-container .ql-editor h2 { margin-top: 2.5rem; margin-bottom: 1.5rem; color: #fff; font-weight: 700; font-size: 1.5rem; }
+                            .prose-editor-container .ql-editor h3 { margin-top: 2rem; margin-bottom: 1rem; color: #fff; font-weight: 700; font-size: 1.25rem; }
+                            .prose-editor-container .ql-editor ul, .prose-editor-container .ql-editor ol { margin-bottom: 1.5rem; color: #e5e7eb; }
+                            .prose-editor-container .ql-editor li { margin-bottom: 0.5rem; }
+                            .prose-editor-container .ql-active .ql-stroke { stroke: #d4af37; }
+                            .prose-editor-container .ql-active .ql-fill { fill: #d4af37; }
+                        `}</style>
                     </div>
 
                     {/* Featured Option */}

@@ -5,10 +5,12 @@ import PhilosophySection from '../components/home/PhilosophySection';
 import Services from '../components/home/Services';
 import TestimonialsSection from '../components/home/TestimonialsSection';
 import BottomCTA from '../components/home/BottomCTA';
+import SEO from '../components/ui/SEO';
 
 const Home = () => {
     return (
         <div className="w-full bg-[#050506]">
+            <SEO canonicalUrl="https://munishkumar.com/" />
             <Hero />
             <StatsBar />
             <ProblemSection />

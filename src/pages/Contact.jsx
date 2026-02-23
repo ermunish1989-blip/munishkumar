@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { FaMapMarkerAlt, FaEnvelope, FaLinkedin, FaClock, FaPhone } from 'react-icons/fa';
 import { useState } from 'react';
+import SEO from '../components/ui/SEO';
 
 const Contact = () => {
     const [formData, setFormData] = useState({

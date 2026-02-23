@@ -1,31 +1,41 @@
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, lazy, Suspense } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import Home from './pages/Home';
-import About from './pages/About';
-import ServicesPage from './pages/Services';
-import Experience from './pages/Experience';
-import Blog from './pages/Blog';
-import Contact from './pages/Contact';
-import PrivacyPolicy from './pages/PrivacyPolicy';
 import PageTransition from './components/ui/PageTransition';
 import ProtectedRoute from './components/ui/ProtectedRoute';
-import AdminLogin from './pages/admin/AdminLogin';
-import AdminDashboard from './pages/admin/AdminDashboard';
-import AdminBlogEditor from './pages/admin/AdminBlogEditor';
 
-// GEO Landing Pages
-import Bahrain from './pages/locations/Bahrain';
-import India from './pages/locations/India';
-import USA from './pages/locations/USA';
-import UK from './pages/locations/UK';
-import Europe from './pages/locations/Europe';
-import UAE from './pages/locations/UAE';
-import SaudiArabia from './pages/locations/SaudiArabia';
-import GCC from './pages/locations/GCC';
-import APAC from './pages/locations/APAC';
+// Lazy load all pages for performance (code splitting)
+const Home = lazy(() => import('./pages/Home'));
+const About = lazy(() => import('./pages/About'));
+const ServicesPage = lazy(() => import('./pages/Services'));
+const Experience = lazy(() => import('./pages/Experience'));
+const Blog = lazy(() => import('./pages/Blog'));
+const BlogPost = lazy(() => import('./pages/BlogPost'));
+const Contact = lazy(() => import('./pages/Contact'));
+const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
+const AdminLogin = lazy(() => import('./pages/admin/AdminLogin'));
+const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'));
+const AdminBlogEditor = lazy(() => import('./pages/admin/AdminBlogEditor'));
+
+// Lazy load GEO Landing Pages
+const Bahrain = lazy(() => import('./pages/locations/Bahrain'));
+const India = lazy(() => import('./pages/locations/India'));
+const USA = lazy(() => import('./pages/locations/USA'));
+const UK = lazy(() => import('./pages/locations/UK'));
+const Europe = lazy(() => import('./pages/locations/Europe'));
+const UAE = lazy(() => import('./pages/locations/UAE'));
+const SaudiArabia = lazy(() => import('./pages/locations/SaudiArabia'));
+const GCC = lazy(() => import('./pages/locations/GCC'));
+const APAC = lazy(() => import('./pages/locations/APAC'));
+
+// Simple loading fallback
+const PageLoader = () => (
+  <div className="min-h-screen bg-[#050506] flex items-center justify-center">
+    <div className="w-12 h-12 border-4 border-[#d4af37]/30 border-t-[#d4af37] rounded-full animate-spin"></div>
+  </div>
+);
 
 import WhatsAppWidget from './components/ui/WhatsAppWidget';
 
@@ -43,26 +53,29 @@ const AnimatedRoutes = () => {
 
   return (
     <AnimatePresence mode="wait">
-      <Routes location={location} key={location.pathname}>
-        <Route path="/" element={<PageTransition><Home /></PageTransition>} />
-        <Route path="/about" element={<PageTransition><About /></PageTransition>} />
-        <Route path="/services" element={<PageTransition><ServicesPage /></PageTransition>} />
-        <Route path="/experience" element={<PageTransition><Experience /></PageTransition>} />
-        <Route path="/blog" element={<PageTransition><Blog /></PageTransition>} />
-        <Route path="/contact" element={<PageTransition><Contact /></PageTransition>} />
-        <Route path="/privacy-policy" element={<PageTransition><PrivacyPolicy /></PageTransition>} />
+      <Suspense fallback={<PageLoader />}>
+        <Routes location={location} key={location.pathname}>
+          <Route path="/" element={<PageTransition><Home /></PageTransition>} />
+          <Route path="/about" element={<PageTransition><About /></PageTransition>} />
+          <Route path="/services" element={<PageTransition><ServicesPage /></PageTransition>} />
+          <Route path="/experience" element={<PageTransition><Experience /></PageTransition>} />
+          <Route path="/blog" element={<PageTransition><Blog /></PageTransition>} />
+          <Route path="/blog/:slug" element={<PageTransition><BlogPost /></PageTransition>} />
+          <Route path="/contact" element={<PageTransition><Contact /></PageTransition>} />
+          <Route path="/privacy-policy" element={<PageTransition><PrivacyPolicy /></PageTransition>} />
 
-        {/* GEO Landing Routes */}
-        <Route path="/locations/bahrain" element={<PageTransition><Bahrain /></PageTransition>} />
-        <Route path="/locations/india" element={<PageTransition><India /></PageTransition>} />
-        <Route path="/locations/usa" element={<PageTransition><USA /></PageTransition>} />
-        <Route path="/locations/uk" element={<PageTransition><UK /></PageTransition>} />
-        <Route path="/locations/europe" element={<PageTransition><Europe /></PageTransition>} />
-        <Route path="/locations/uae" element={<PageTransition><UAE /></PageTransition>} />
-        <Route path="/locations/saudi-arabia" element={<PageTransition><SaudiArabia /></PageTransition>} />
-        <Route path="/locations/gcc" element={<PageTransition><GCC /></PageTransition>} />
-        <Route path="/locations/apac" element={<PageTransition><APAC /></PageTransition>} />
-      </Routes>
+          {/* GEO Landing Routes */}
+          <Route path="/locations/bahrain" element={<PageTransition><Bahrain /></PageTransition>} />
+          <Route path="/locations/india" element={<PageTransition><India /></PageTransition>} />
+          <Route path="/locations/usa" element={<PageTransition><USA /></PageTransition>} />
+          <Route path="/locations/uk" element={<PageTransition><UK /></PageTransition>} />
+          <Route path="/locations/europe" element={<PageTransition><Europe /></PageTransition>} />
+          <Route path="/locations/uae" element={<PageTransition><UAE /></PageTransition>} />
+          <Route path="/locations/saudi-arabia" element={<PageTransition><SaudiArabia /></PageTransition>} />
+          <Route path="/locations/gcc" element={<PageTransition><GCC /></PageTransition>} />
+          <Route path="/locations/apac" element={<PageTransition><APAC /></PageTransition>} />
+        </Routes>
+      </Suspense>
     </AnimatePresence>
   );
 };
@@ -74,10 +87,10 @@ function App() {
       <Routes>
 
         {/* ─── Admin Routes (no Navbar/Footer) ─── */}
-        <Route path="/admin" element={<AdminLogin />} />
-        <Route path="/admin/dashboard" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
-        <Route path="/admin/blog/new" element={<ProtectedRoute><AdminBlogEditor /></ProtectedRoute>} />
-        <Route path="/admin/blog/edit/:id" element={<ProtectedRoute><AdminBlogEditor /></ProtectedRoute>} />
+        <Route path="/admin" element={<Suspense fallback={<PageLoader />}><AdminLogin /></Suspense>} />
+        <Route path="/admin/dashboard" element={<ProtectedRoute><Suspense fallback={<PageLoader />}><AdminDashboard /></Suspense></ProtectedRoute>} />
+        <Route path="/admin/blog/new" element={<ProtectedRoute><Suspense fallback={<PageLoader />}><AdminBlogEditor /></Suspense></ProtectedRoute>} />
+        <Route path="/admin/blog/edit/:id" element={<ProtectedRoute><Suspense fallback={<PageLoader />}><AdminBlogEditor /></Suspense></ProtectedRoute>} />
 
         {/* ─── Main Site Routes (with Navbar/Footer) ─── */}
         <Route path="/*" element={

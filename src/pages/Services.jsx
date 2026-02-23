@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import BottomCTA from '../components/home/BottomCTA';
 import { FaCheckCircle, FaGlobe, FaHandshake, FaChartLine, FaSearchDollar, FaChalkboardTeacher, FaProjectDiagram } from 'react-icons/fa';
+import SEO from '../components/ui/SEO';
 
 const ServicesPage = () => {
     const services = [
@@ -90,6 +91,12 @@ const ServicesPage = () => {
 
     return (
         <div className="w-full relative bg-[#050506]">
+            <SEO
+                title="Agency Scaling & B2B Growth Services | Munish Kumar"
+                description="Expert B2B consulting services including Global Expansion Strategy, AI SEO Configuration, Answer Engine Optimization (AEO), and Team Structuring."
+                canonicalUrl="https://munishkumar.com/services"
+                keywords="B2B Growth Services, Agency Scaling Consulting, AI SEO Configuration, Global Expansion Strategy, Answer Engine Optimization Consulting"
+            />
             {/* Page Hero */}
             <section className="pt-40 pb-20 bg-[#0A0A0C] relative border-b border-[#d4af37]/10 overflow-hidden">
                 <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-gradient-to-r from-[#d4af37]/10 to-transparent rounded-full blur-[100px] pointer-events-none" />

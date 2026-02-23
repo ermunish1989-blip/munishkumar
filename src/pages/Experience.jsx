@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import BottomCTA from '../components/home/BottomCTA';
 import { AnimatedCounter } from '../components/ui/AnimatedCounter';
+import SEO from '../components/ui/SEO';
 
 const Experience = () => {
     const roles = [
@@ -87,6 +88,11 @@ const Experience = () => {
 
     return (
         <div className="w-full relative bg-[#050506]">
+            <SEO
+                title="Career Experience & Track Record | Munish Kumar"
+                description="Review Munish Kumar's extensive background leading global business development, spanning IT scaling in Bahrain to leading 150+ member teams for WTechy."
+                canonicalUrl="https://munishkumar.com/experience"
+            />
             {/* Page Hero */}
             <section className="pt-40 pb-20 bg-[#0A0A0C] relative border-b border-[#d4af37]/10 overflow-hidden">
                 <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-gradient-to-r from-[#d4af37]/10 to-transparent rounded-full blur-[100px] pointer-events-none" />

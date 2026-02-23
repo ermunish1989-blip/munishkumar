@@ -1,8 +1,10 @@
 import { motion } from 'framer-motion';
 import { FaArrowRight, FaPaperPlane, FaBolt } from 'react-icons/fa';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import BottomCTA from '../components/home/BottomCTA';
 import { getBlogPosts, getFeaturedPost } from '../utils/blogStorage';
+import SEO from '../components/ui/SEO';
 
 const Blog = () => {
     const posts = getBlogPosts();
@@ -48,7 +50,12 @@ const Blog = () => {
     };
 
     return (
-        <div className="w-full relative bg-[#050506]">
+        <div className="bg-[#050506] min-h-screen text-white pt-32 font-sans">
+            <SEO
+                title="B2B Growth & Agency Scaling Blog | Munish Kumar"
+                description="Actionable strategies, playbooks, and insights on B2B global expansion, LinkedIn lead generation, and structural agency scaling."
+                canonicalUrl="https://munishkumar.com/blog"
+            />
             {/* Page Hero */}
             <section className="pt-40 pb-20 bg-[#0A0A0C] relative border-b border-[#d4af37]/10 overflow-hidden">
                 <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-l from-[#d4af37]/10 to-transparent rounded-full blur-[120px] pointer-events-none" />
@@ -129,9 +136,9 @@ const Blog = () => {
                                     <span className="text-gray-500 text-sm font-bold uppercase tracking-wider flex items-center gap-3">
                                         {featuredPost.meta}
                                     </span>
-                                    <a href="#" className="inline-flex items-center justify-center px-6 py-2.5 rounded-full border border-[#d4af37]/50 bg-[#d4af37]/10 text-[#d4af37] font-bold text-sm uppercase tracking-wider hover:bg-[#d4af37] hover:text-black hover:shadow-[0_0_20px_rgba(212,175,55,0.4)] transition-all duration-300 group/btn">
+                                    <Link to={`/blog/${featuredPost.slug}`} className="inline-flex items-center justify-center px-6 py-2.5 rounded-full border border-[#d4af37]/50 bg-[#d4af37]/10 text-[#d4af37] font-bold text-sm uppercase tracking-wider hover:bg-[#d4af37] hover:text-black hover:shadow-[0_0_20px_rgba(212,175,55,0.4)] transition-all duration-300 group/btn">
                                         Read Article <FaArrowRight className="ml-2 group-hover/btn:translate-x-1 transition-transform" />
-                                    </a>
+                                    </Link>
                                 </div>
                             </div>
                         </div>
@@ -175,12 +182,12 @@ const Blog = () => {
                                         {post.hook}
                                     </p>
 
-                                    <a href="#" className="mt-auto inline-flex items-center justify-between text-gray-300 font-bold text-sm uppercase tracking-wider group-hover:text-[#d4af37] transition-colors pt-6 border-t border-white/5 group-hover:border-[#d4af37]/20 relative z-10 w-full group/link">
+                                    <Link to={`/blog/${post.slug}`} className="mt-auto inline-flex items-center justify-between text-gray-300 font-bold text-sm uppercase tracking-wider group-hover:text-[#d4af37] transition-colors pt-6 border-t border-white/5 group-hover:border-[#d4af37]/20 relative z-10 w-full group/link">
                                         <span>Read Article</span>
                                         <div className="w-8 h-8 rounded-full border border-gray-600 flex items-center justify-center group-hover/link:border-[#d4af37] group-hover/link:bg-[#d4af37]/10 transition-colors">
                                             <FaArrowRight className="text-xs group-hover/link:translate-x-1 transition-transform" />
                                         </div>
-                                    </a>
+                                    </Link>
                                 </div>
                             </motion.div>
                         ))}
