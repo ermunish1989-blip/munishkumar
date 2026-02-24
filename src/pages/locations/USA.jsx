@@ -7,9 +7,9 @@ const USA = () => {
     return (
         <div className="w-full bg-[#050506] relative">
             <Helmet>
-                <title>B2B Business Advisor for USA Market Entry | Agency Scaling Consultant</title>
-                <meta name="description" content="Munish Kumar specializes in helping agencies and SaaS companies scale into the USA. Expert Answer Engine Optimization and B2B growth consulting." />
-                <meta name="keywords" content="USA Market Entry Consultant, Business Advisor USA, Agency Growth Consultant North America, B2B Sales Strategy USA, SaaS Scaling USA" />
+                <title>AI SEO Agency in USA | B2B Business Advisor | Munish Kumar</title>
+                <meta name="description" content="Looking for an AI SEO Agency in USA? Munish Kumar is a top Agency Scaling Consultant specializing in AEO, NLP, and US market entry for B2B tech firms." />
+                <meta name="keywords" content="AI SEO Agency USA, B2B Business Advisor USA, Agency Growth Consultant North America, B2B Sales Strategy USA, SaaS Scaling USA, AEO Services USA, RankBrain SEO USA" />
                 <script type="application/ld+json">
                     {`
                     {
@@ -139,6 +139,7 @@ const USA = () => {
                                 <p className="text-gray-400 font-light">No. While a local C-Corp can help with perception mapping down the line, I have successfully scaled dozens of firms into 7-figure US revenue tiers operating entirely cross-border.</p>
                             </div>
                         </div>
+                        <p className="mt-12 text-[10px] text-gray-500 uppercase tracking-widest text-center">Last Updated: February 24, 2026</p>
                     </div>
                 </div>
             </section>

@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, lazy, Suspense } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { FaArrowLeft, FaSave, FaStar } from 'react-icons/fa';
-import ReactQuill from 'react-quill';
+import { FaArrowLeft, FaSave, FaStar, FaExclamationTriangle } from 'react-icons/fa';
+// Dynamic import for ReactQuill to avoid build-time/init crashes
+const ReactQuill = lazy(() => import('react-quill'));
 import 'react-quill/dist/quill.snow.css';
 import slugify from 'slugify';
 import { getBlogPosts } from '../../utils/blogStorage';
@@ -19,12 +20,15 @@ const AdminBlogEditor = () => {
     const isEditing = id !== undefined;
 
     const [form, setForm] = useState(() => {
+        const defaultState = { title: '', category: 'B2B Growth', time: '5 min read', hook: '', content: '', slug: '', faq: [], setAsFeatured: false, imageUrl: '', updatedAt: new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) };
+
         if (isEditing) {
             const posts = getBlogPosts();
             const post = posts[parseInt(id)];
-            if (post) return { ...post, setAsFeatured: false };
+            if (post) return { ...post, faq: post.faq || [], setAsFeatured: false, imageUrl: post.imageUrl || '', updatedAt: post.updatedAt || '' };
+            return defaultState;
         }
-        return { title: '', category: 'B2B Growth', time: '5 min read', hook: '', content: '', slug: '', setAsFeatured: false };
+        return defaultState;
     });
     const [saved, setSaved] = useState(false);
 
@@ -35,6 +39,20 @@ const AdminBlogEditor = () => {
 
     const handleContentChange = (content) => {
         setForm(prev => ({ ...prev, content }));
+    };
+
+    const handleAddFaq = () => {
+        setForm(prev => ({ ...prev, faq: [...prev.faq, { question: '', answer: '' }] }));
+    };
+
+    const handleFaqChange = (index, field, value) => {
+        const newFaq = [...form.faq];
+        newFaq[index][field] = value;
+        setForm(prev => ({ ...prev, faq: newFaq }));
+    };
+
+    const handleRemoveFaq = (index) => {
+        setForm(prev => ({ ...prev, faq: prev.faq.filter((_, i) => i !== index) }));
     };
 
     const handleSave = (e) => {
@@ -52,7 +70,10 @@ const AdminBlogEditor = () => {
             time: form.time,
             hook: form.hook,
             content: form.content,
-            slug: postSlug
+            slug: postSlug,
+            faq: form.faq,
+            imageUrl: form.imageUrl,
+            updatedAt: form.updatedAt
         };
 
         let updatedPosts;
@@ -132,14 +153,51 @@ const AdminBlogEditor = () => {
                                 </select>
                             </div>
                         </div>
+
+                        <div className="space-y-2 pt-2">
+                            <label className="text-sm text-gray-400">Last Updated Date <span className="text-gray-600 ml-1">(Format: Month Day, Year)</span></label>
+                            <input
+                                type="text"
+                                name="updatedAt"
+                                value={form.updatedAt}
+                                onChange={handleChange}
+                                placeholder="e.g. February 24, 2026"
+                                className="w-full bg-[#111115] border border-gray-800 text-white rounded-xl px-5 py-3.5 focus:outline-none focus:border-[#d4af37] transition-colors text-base"
+                            />
+                        </div>
                     </div>
 
                     {/* Content */}
                     <div className="bg-[#0a0a0c] border border-white/5 rounded-2xl p-8 space-y-6">
-                        <h2 className="text-white font-bold text-lg flex items-center gap-2">
-                            <span className="w-6 h-6 rounded bg-[#d4af37]/20 text-[#d4af37] text-xs flex items-center justify-center font-bold">2</span>
-                            Post Preview / Hook
-                        </h2>
+                        <div className="flex items-center justify-between">
+                            <h2 className="text-white font-bold text-lg flex items-center gap-2">
+                                <span className="w-6 h-6 rounded bg-[#d4af37]/20 text-[#d4af37] text-xs flex items-center justify-center font-bold">2</span>
+                                Post Preview / Hook
+                            </h2>
+                        </div>
+
+                        {/* Persistence Warning */}
+                        <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl p-4 flex gap-4 items-start">
+                            <FaExclamationTriangle className="text-amber-500 mt-1 flex-shrink-0" />
+                            <div className="text-xs space-y-1">
+                                <p className="text-amber-200 font-bold uppercase tracking-wider">Local Storage Persistence</p>
+                                <p className="text-gray-400 leading-relaxed">
+                                    Changes are saved to your browser's local storage. To make them live for everyone, use the <strong>"Export Data"</strong> button in the dashboard and update <code className="text-[#d4af37]">blogData.json</code>.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="space-y-2">
+                            <label className="text-sm text-gray-400">Cover Image URL <span className="text-gray-600 ml-1">(Optional header image)</span></label>
+                            <input
+                                type="url"
+                                name="imageUrl"
+                                value={form.imageUrl}
+                                onChange={handleChange}
+                                placeholder="https://example.com/image.jpg"
+                                className="w-full bg-[#111115] border border-gray-800 text-white rounded-xl px-5 py-3.5 focus:outline-none focus:border-[#d4af37] transition-colors text-base"
+                            />
+                        </div>
 
                         <div className="space-y-2">
                             <label className="text-sm text-gray-400">Hook / Excerpt <span className="text-[#d4af37]">*</span> <span className="text-gray-600 ml-1">(shown on blog cards)</span></label>
@@ -163,36 +221,41 @@ const AdminBlogEditor = () => {
                             Full Article Content
                         </h2>
 
-                        <div className="prose-editor-container">
-                            <ReactQuill
-                                theme="snow"
-                                value={form.content}
-                                onChange={handleContentChange}
-                                className="bg-[#111115] text-white rounded-xl border border-gray-800 focus-within:border-[#d4af37] transition-colors"
-                                placeholder="Start writing your masterpiece..."
-                                modules={{
-                                    toolbar: [
-                                        [{ 'header': [2, 3, false] }],
-                                        ['bold', 'italic', 'underline', 'strike'],
-                                        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-                                        ['link', 'blockquote'],
-                                        ['clean']
-                                    ]
-                                }}
-                            />
+                        <div className="prose-editor-container min-h-[450px]">
+                            <Suspense fallback={<div className="h-[450px] bg-[#111115] animate-pulse rounded-xl border border-gray-800" />}>
+                                <ReactQuill
+                                    theme="snow"
+                                    value={form.content}
+                                    onChange={handleContentChange}
+                                    modules={{
+                                        toolbar: [
+                                            [{ 'header': [2, 3, false] }],
+                                            ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+                                            [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                                            ['link', 'image', 'video'],
+                                            ['clean']
+                                        ],
+                                    }}
+                                    placeholder="Start writing your masterpiece..."
+                                />
+                            </Suspense>
                         </div>
                         <style>{`
                             .prose-editor-container .ql-toolbar {
-                                border: none;
-                                border-bottom: 1px solid #1f2937;
+                                border: 1px solid #1f2937;
                                 border-top-left-radius: 0.75rem;
                                 border-top-right-radius: 0.75rem;
-                                background-color: #050506;
+                                background-color: #0d0d12;
+                                border-bottom: none;
                             }
                             .prose-editor-container .ql-container {
-                                border: none;
+                                border: 1px solid #1f2937;
+                                border-bottom-left-radius: 0.75rem;
+                                border-bottom-right-radius: 0.75rem;
                                 min-height: 400px;
-                                font-size: 1.125rem;
+                                font-size: 1rem;
+                                background-color: #111115;
+                                color: #e5e7eb;
                             }
                             .prose-editor-container .ql-stroke { stroke: #9ca3af; }
                             .prose-editor-container .ql-fill { fill: #9ca3af; }
@@ -202,14 +265,73 @@ const AdminBlogEditor = () => {
                             .prose-editor-container .ql-picker-item:hover { color: #d4af37; }
                             .prose-editor-container button:hover .ql-stroke { stroke: #d4af37; }
                             .prose-editor-container button:hover .ql-fill { fill: #d4af37; }
-                            .prose-editor-container .ql-editor p { margin-bottom: 1.5rem; line-height: 1.8; color: #e5e7eb; }
-                            .prose-editor-container .ql-editor h2 { margin-top: 2.5rem; margin-bottom: 1.5rem; color: #fff; font-weight: 700; font-size: 1.5rem; }
-                            .prose-editor-container .ql-editor h3 { margin-top: 2rem; margin-bottom: 1rem; color: #fff; font-weight: 700; font-size: 1.25rem; }
-                            .prose-editor-container .ql-editor ul, .prose-editor-container .ql-editor ol { margin-bottom: 1.5rem; color: #e5e7eb; }
-                            .prose-editor-container .ql-editor li { margin-bottom: 0.5rem; }
+                            .prose-editor-container .ql-editor { min-height: 400px; }
+                            .prose-editor-container .ql-editor p { margin-bottom: 1.25rem; line-height: 1.7; }
+                            .prose-editor-container .ql-editor h2 { margin-top: 2rem; margin-bottom: 1rem; color: #fff; }
+                            .prose-editor-container .ql-editor h3 { margin-top: 1.5rem; margin-bottom: 0.75rem; color: #fff; }
                             .prose-editor-container .ql-active .ql-stroke { stroke: #d4af37; }
                             .prose-editor-container .ql-active .ql-fill { fill: #d4af37; }
                         `}</style>
+                    </div>
+
+                    {/* FAQ / AEO Section */}
+                    <div className="bg-[#0a0a0c] border border-white/5 rounded-2xl p-8 space-y-6">
+                        <div className="flex items-center justify-between mb-2">
+                            <h2 className="text-white font-bold text-lg flex items-center gap-2">
+                                <span className="w-6 h-6 rounded bg-[#d4af37]/20 text-[#d4af37] text-xs flex items-center justify-center font-bold">4</span>
+                                AI SEO & FAQ Schema (AEO)
+                            </h2>
+                            <button
+                                type="button"
+                                onClick={handleAddFaq}
+                                className="text-xs text-[#d4af37] hover:text-[#b89327] font-bold tracking-wide uppercase px-3 py-1.5 border border-[#d4af37]/30 rounded-lg hover:bg-[#d4af37]/10 transition-colors"
+                            >
+                                + Add FAQ
+                            </button>
+                        </div>
+                        <p className="text-gray-500 text-sm mb-6">These questions will appear at the bottom of your post and will be injected into the page's hidden JSON-LD schema to rank in Google AI Overviews and ChatGPT searches.</p>
+
+                        {form.faq.length === 0 ? (
+                            <div className="text-center py-8 border border-dashed border-gray-800 rounded-xl">
+                                <p className="text-gray-500 text-sm">No FAQs added yet. Add some to boost Answer Engine Optimization.</p>
+                            </div>
+                        ) : (
+                            <div className="space-y-6">
+                                {form.faq.map((item, index) => (
+                                    <div key={index} className="p-5 bg-[#111115] border border-gray-800 rounded-xl relative group">
+                                        <button
+                                            type="button"
+                                            onClick={() => handleRemoveFaq(index)}
+                                            className="absolute top-4 right-4 text-gray-500 hover:text-red-500 text-sm transition-colors opacity-0 group-hover:opacity-100"
+                                        >
+                                            Remove
+                                        </button>
+                                        <div className="space-y-4">
+                                            <div>
+                                                <label className="text-xs text-gray-500 uppercase tracking-wider font-bold mb-1 block">Question {index + 1}</label>
+                                                <input
+                                                    type="text"
+                                                    value={item.question}
+                                                    onChange={(e) => handleFaqChange(index, 'question', e.target.value)}
+                                                    placeholder="e.g. What is the fastest way to scale a digital agency?"
+                                                    className="w-full bg-transparent border-b border-gray-800 text-white px-0 py-2 focus:outline-none focus:border-[#d4af37] transition-colors text-sm"
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="text-xs text-gray-500 uppercase tracking-wider font-bold mb-1 block">Answer {index + 1}</label>
+                                                <textarea
+                                                    rows="2"
+                                                    value={item.answer}
+                                                    onChange={(e) => handleFaqChange(index, 'answer', e.target.value)}
+                                                    placeholder="Provide a concise, direct answer optimized for AI extraction..."
+                                                    className="w-full bg-[#15151a] border border-gray-800 text-white rounded-lg px-3 py-2 focus:outline-none focus:border-[#d4af37] transition-colors text-sm resize-y min-h-[60px]"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
 
                     {/* Featured Option */}

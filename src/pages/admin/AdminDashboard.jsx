@@ -1,14 +1,33 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { FaPenSquare, FaSignOutAlt, FaChartBar, FaTrash, FaEdit, FaPlus, FaGlobe, FaEnvelope } from 'react-icons/fa';
+import { FaPenSquare, FaSignOutAlt, FaChartBar, FaTrash, FaEdit, FaPlus, FaGlobe, FaEnvelope, FaDownload } from 'react-icons/fa';
 import { getBlogPosts, savePosts, FEATURED_KEY } from '../../utils/blogStorage';
+import { getResources, saveResources } from '../../utils/resourceStorage';
 
 const AdminDashboard = () => {
     const navigate = useNavigate();
     const [posts, setPosts] = useState(() => getBlogPosts());
+    const [resources, setResources] = useState(() => getResources());
     const [activeTab, setActiveTab] = useState('posts');
     const [deleteId, setDeleteId] = useState(null);
+    const [deleteResId, setDeleteResId] = useState(null);
+
+    const handleExport = () => {
+        const data = {
+            blog: { posts: getBlogPosts(), featuredPost: JSON.parse(localStorage.getItem(FEATURED_KEY) || '{}') },
+            resources: getResources()
+        };
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `munishkumar_data_export_${new Date().toISOString().split('T')[0]}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    };
 
     const handleLogout = () => {
         sessionStorage.removeItem('mk_admin_auth');
@@ -20,6 +39,13 @@ const AdminDashboard = () => {
         setPosts(updated);
         savePosts(updated);
         setDeleteId(null);
+    };
+
+    const handleDeleteResource = (idx) => {
+        const updated = resources.filter((_, i) => i !== idx);
+        setResources(updated);
+        saveResources(updated);
+        setDeleteResId(null);
     };
 
     const handleFeature = (post) => {
@@ -53,6 +79,7 @@ const AdminDashboard = () => {
                 <nav className="flex-1 p-4 space-y-1">
                     {[
                         { id: 'posts', label: 'Blog Posts', icon: FaPenSquare },
+                        { id: 'resources', label: 'Resources', icon: FaDownload },
                         { id: 'stats', label: 'Overview', icon: FaChartBar },
                         { id: 'enquiries', label: 'Enquiries', icon: FaEnvelope },
                     ].map(({ id, label, icon }) => (
@@ -66,7 +93,14 @@ const AdminDashboard = () => {
                         </button>
                     ))}
 
-                    <div className="border-t border-white/5 pt-3 mt-3">
+                    <div className="border-t border-white/5 pt-3 mt-3 space-y-1">
+                        <button
+                            onClick={handleExport}
+                            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-[#d4af37] bg-white/5 hover:bg-[#d4af37]/10 transition-all border border-[#d4af37]/20"
+                        >
+                            <FaDownload className="text-base" /> Export Data (JSON)
+                        </button>
+
                         <a href="/" target="_blank" rel="noopener noreferrer" className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-400 hover:text-white hover:bg-white/5 transition-all">
                             <FaGlobe className="text-base" /> View Website
                         </a>
@@ -89,8 +123,8 @@ const AdminDashboard = () => {
                     <div>
                         <div className="flex items-center justify-between mb-8">
                             <div>
-                                <h1 className="text-2xl font-bold text-white font-heading">Blog Posts</h1>
-                                <p className="text-gray-500 text-sm mt-1">{posts.length} posts published</p>
+                                <h1 className="text-2xl font-bold text-white font-heading">Manage Blog Posts</h1>
+                                <p className="text-gray-500 text-sm mt-1">{posts.length} articles published</p>
                             </div>
                             <Link to="/admin/blog/new" className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-[#d4af37] to-[#b89327] text-black font-bold rounded-lg shadow-[0_4px_15px_rgba(212,175,55,0.3)] hover:shadow-[0_4px_25px_rgba(212,175,55,0.5)] transition-all text-sm">
                                 <FaPlus /> New Post
@@ -98,41 +132,103 @@ const AdminDashboard = () => {
                         </div>
 
                         <div className="bg-[#0a0a0c] border border-white/5 rounded-2xl overflow-hidden">
-                            <table className="w-full text-sm">
-                                <thead>
-                                    <tr className="border-b border-white/5 text-gray-500 text-xs uppercase tracking-wider">
-                                        <th className="text-left px-6 py-4 font-medium">Title</th>
-                                        <th className="text-left px-6 py-4 font-medium">Category</th>
-                                        <th className="text-left px-6 py-4 font-medium">Read Time</th>
-                                        <th className="text-right px-6 py-4 font-medium">Actions</th>
+                            <table className="w-full text-sm text-gray-300">
+                                <thead className="bg-white/[0.02] text-gray-500 text-xs uppercase tracking-wider">
+                                    <tr>
+                                        <th className="px-6 py-4 text-left font-medium">Post Title</th>
+                                        <th className="px-6 py-4 text-left font-medium">Category</th>
+                                        <th className="px-6 py-4 text-right font-medium">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {posts.length === 0 ? (
-                                        <tr><td colSpan="4" className="text-center py-16 text-gray-600">No posts yet. <Link to="/admin/blog/new" className="text-[#d4af37] hover:underline">Add your first post →</Link></td></tr>
+                                        <tr><td colSpan="3" className="px-6 py-12 text-center text-gray-600 italic">No posts found. Start by creating your first article.</td></tr>
                                     ) : posts.map((post, idx) => (
-                                        <tr key={idx} className="border-b border-white/[0.03] hover:bg-white/[0.02] transition-colors group">
+                                        <tr key={idx} className="border-t border-white/5 hover:bg-white/[0.01] transition-all group">
                                             <td className="px-6 py-4">
-                                                <p className="text-white font-medium line-clamp-1 group-hover:text-[#d4af37] transition-colors">{post.title}</p>
-                                                <p className="text-gray-500 text-xs mt-1 line-clamp-1">{post.hook}</p>
+                                                <div className="flex flex-col">
+                                                    <span className="text-white font-medium group-hover:text-[#d4af37] transition-colors">{post.title}</span>
+                                                    <span className="text-xs text-gray-600 mt-0.5 line-clamp-1 truncate max-w-sm">{post.hook}</span>
+                                                </div>
                                             </td>
                                             <td className="px-6 py-4">
-                                                <span className="text-xs text-[#d4af37] bg-[#d4af37]/10 border border-[#d4af37]/20 px-3 py-1 rounded-full">{post.category}</span>
+                                                <span className="text-[10px] px-2 py-0.5 rounded-full bg-white/5 border border-white/10 uppercase tracking-wider">{post.category}</span>
                                             </td>
-                                            <td className="px-6 py-4 text-gray-400">{post.time}</td>
                                             <td className="px-6 py-4">
                                                 <div className="flex items-center justify-end gap-2">
-                                                    <button onClick={() => handleFeature(post)} className="text-xs text-gray-500 hover:text-yellow-400 transition-colors px-2 py-1 rounded" title="Set as Featured">★</button>
-                                                    <Link to={`/admin/blog/edit/${idx}`} className="p-2 text-gray-500 hover:text-[#d4af37] hover:bg-[#d4af37]/10 rounded-lg transition-all">
+                                                    <button onClick={() => handleFeature(post)} className="p-2 text-gray-500 hover:text-[#d4af37] hover:bg-[#d4af37]/10 rounded-lg transition-all" title="Set as Featured">
+                                                        <FaChartBar />
+                                                    </button>
+                                                    <Link to={`/admin/blog/edit/${idx}`} className="p-2 text-gray-500 hover:text-white hover:bg-white/10 rounded-lg transition-all">
                                                         <FaEdit />
                                                     </Link>
                                                     {deleteId === idx ? (
                                                         <div className="flex items-center gap-1">
-                                                            <button onClick={() => handleDelete(idx)} className="text-xs bg-red-500/20 text-red-400 border border-red-500/30 px-2 py-1 rounded-lg hover:bg-red-500/30 transition">Confirm</button>
-                                                            <button onClick={() => setDeleteId(null)} className="text-xs text-gray-500 px-2 py-1">Cancel</button>
+                                                            <button onClick={() => handleDelete(idx)} className="text-xs bg-red-500/20 text-red-500 px-2 py-1 rounded">Delete</button>
+                                                            <button onClick={() => setDeleteId(null)} className="text-xs text-gray-500 px-1 hover:text-white">Esc</button>
                                                         </div>
                                                     ) : (
-                                                        <button onClick={() => setDeleteId(idx)} className="p-2 text-gray-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all">
+                                                        <button onClick={() => setDeleteId(idx)} className="p-2 text-gray-500 hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-all">
+                                                            <FaTrash />
+                                                        </button>
+                                                    )}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                )}
+                {/* ─── RESOURCES TAB ─── */}
+                {activeTab === 'resources' && (
+                    <div>
+                        <div className="flex items-center justify-between mb-8">
+                            <div>
+                                <h1 className="text-2xl font-bold text-white font-heading">Resources & Showcase</h1>
+                                <p className="text-gray-500 text-sm mt-1">{resources.length} resources available</p>
+                            </div>
+                            <Link to="/admin/resources/new" className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-[#d4af37] to-[#b89327] text-black font-bold rounded-lg shadow-[0_4px_15px_rgba(212,175,55,0.3)] hover:shadow-[0_4px_25px_rgba(212,175,55,0.5)] transition-all text-sm">
+                                <FaPlus /> Add Resource
+                            </Link>
+                        </div>
+
+                        <div className="bg-[#0a0a0c] border border-white/5 rounded-2xl overflow-hidden">
+                            <table className="w-full text-sm">
+                                <thead>
+                                    <tr className="border-b border-white/5 text-gray-500 text-xs uppercase tracking-wider">
+                                        <th className="text-left px-6 py-4 font-medium">Resource Title</th>
+                                        <th className="text-left px-6 py-4 font-medium">Category</th>
+                                        <th className="text-left px-6 py-4 font-medium">Type</th>
+                                        <th className="text-right px-6 py-4 font-medium">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {resources.length === 0 ? (
+                                        <tr><td colSpan="4" className="text-center py-16 text-gray-600">No resources yet. <Link to="/admin/resources/new" className="text-[#d4af37] hover:underline">Add your first resource →</Link></td></tr>
+                                    ) : resources.map((res, idx) => (
+                                        <tr key={idx} className="border-b border-white/[0.03] hover:bg-white/[0.02] transition-colors group">
+                                            <td className="px-6 py-4">
+                                                <p className="text-white font-medium line-clamp-1 group-hover:text-[#d4af37] transition-colors">{res.title}</p>
+                                                <p className="text-gray-500 text-xs mt-1 line-clamp-1 truncate max-w-md">{res.description}</p>
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <span className="text-xs text-[#d4af37] bg-[#d4af37]/10 border border-[#d4af37]/20 px-3 py-1 rounded-full">{res.category}</span>
+                                            </td>
+                                            <td className="px-6 py-4 text-gray-400 font-mono text-xs">{res.type}</td>
+                                            <td className="px-6 py-4">
+                                                <div className="flex items-center justify-end gap-2">
+                                                    <Link to={`/admin/resources/edit/${idx}`} className="p-2 text-gray-500 hover:text-[#d4af37] hover:bg-[#d4af37]/10 rounded-lg transition-all">
+                                                        <FaEdit />
+                                                    </Link>
+                                                    {deleteResId === idx ? (
+                                                        <div className="flex items-center gap-1">
+                                                            <button onClick={() => handleDeleteResource(idx)} className="text-xs bg-red-500/20 text-red-400 border border-red-500/30 px-2 py-1 rounded-lg hover:bg-red-500/30 transition">Confirm</button>
+                                                            <button onClick={() => setDeleteResId(null)} className="text-xs text-gray-500 px-2 py-1">Cancel</button>
+                                                        </div>
+                                                    ) : (
+                                                        <button onClick={() => setDeleteResId(idx)} className="p-2 text-gray-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all">
                                                             <FaTrash />
                                                         </button>
                                                     )}
@@ -193,7 +289,7 @@ const AdminDashboard = () => {
                             <a href="https://formspree.io/login" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#d4af37] to-[#b89327] text-black font-bold rounded-lg shadow-[0_4px_15px_rgba(212,175,55,0.3)] hover:shadow-[0_4px_25px_rgba(212,175,55,0.5)] transition-all text-sm">
                                 Open Formspree Dashboard →
                             </a>
-                            <p className="text-gray-600 text-xs mt-4">Need to set it up first? Replace <code className="bg-white/5 px-2 py-0.5 rounded text-gray-400">YOUR_FORMSPREE_ID</code> in Contact.jsx and Blog.jsx</p>
+                            <p className="text-gray-600 text-xs mt-4">Need to set it up first? Replace <code className="bg-white/5 px-2 py-0.5 rounded text-gray-400">xqedgwqy</code> in Contact.jsx and Blog.jsx</p>
                         </div>
                     </div>
                 )}

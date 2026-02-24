@@ -27,9 +27,11 @@ const Navbar = () => {
     }, []);
 
     useEffect(() => {
-        // eslint-disable-next-line react-hooks/set-state-in-effect
-        if (mobileMenuOpen) setMobileMenuOpen(false);
-    }, [location, mobileMenuOpen]);
+        const timer = setTimeout(() => {
+            setMobileMenuOpen(false);
+        }, 0);
+        return () => clearTimeout(timer);
+    }, [location]);
 
     const navLinks = [
         { name: 'Home', path: '/' },
@@ -37,6 +39,7 @@ const Navbar = () => {
         { name: 'Services', path: '/services' },
         { name: 'Experience', path: '/experience' },
         { name: 'Blog', path: '/blog' },
+        { name: 'Resources', path: '/resources' },
         { name: 'Contact', path: '/contact' },
     ];
 

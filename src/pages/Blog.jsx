@@ -11,7 +11,7 @@ const Blog = () => {
     const featuredPost = getFeaturedPost();
     const [isSubscribed, setIsSubscribed] = useState(false);
 
-    const FORMSPREE_ID = 'YOUR_FORMSPREE_ID'; // Replace with your actual ID from formspree.io
+    const FORMSPREE_ID = 'xqedgwqy'; // Your verified Formspree ID
     const [isLoading, setIsLoading] = useState(false);
 
     const handleNewsletterSubmit = async (e) => {
@@ -106,16 +106,24 @@ const Blog = () => {
 
                             {/* Graphic Section */}
                             <div className="lg:w-1/2 bg-gradient-to-br from-[#101014] to-[#050506] min-h-[350px] lg:min-h-full flex items-center justify-center relative overflow-hidden group-hover:scale-[1.02] transition-transform duration-700">
-                                <div className="absolute inset-0 bg-[#d4af37]/5 z-0"></div>
-                                <div className="absolute top-0 right-0 w-full h-full bg-[url('/grid-pattern.svg')] opacity-[0.05] z-0"></div>
-                                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-[#d4af37]/20 blur-[80px] rounded-full group-hover:scale-150 transition-transform duration-1000"></div>
+                                {featuredPost.imageUrl ? (
+                                    <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${featuredPost.imageUrl})` }}>
+                                        <div className="absolute inset-0 bg-[#050506]/30 group-hover:bg-[#050506]/10 transition-colors duration-500"></div>
+                                    </div>
+                                ) : (
+                                    <>
+                                        <div className="absolute inset-0 bg-[#d4af37]/5 z-0"></div>
+                                        <div className="absolute top-0 right-0 w-full h-full bg-[url('/grid-pattern.svg')] opacity-[0.05] z-0"></div>
+                                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-[#d4af37]/20 blur-[80px] rounded-full group-hover:scale-150 transition-transform duration-1000"></div>
 
-                                <h2 className="text-6xl md:text-8xl text-white/[0.03] font-bold absolute font-heading select-none w-full text-center pointer-events-none tracking-widest whitespace-nowrap -rotate-12 group-hover:text-white/[0.05] transition-colors duration-500">
-                                    FEATURED
-                                </h2>
-                                <span className="relative z-10 text-6xl md:text-8xl text-transparent bg-clip-text bg-gradient-to-br from-[#d4af37] to-[#b89327] drop-shadow-[0_0_30px_rgba(212,175,55,0.4)] group-hover:animate-pulse">
-                                    <FaBolt />
-                                </span>
+                                        <h2 className="text-6xl md:text-8xl text-white/[0.03] font-bold absolute font-heading select-none w-full text-center pointer-events-none tracking-widest whitespace-nowrap -rotate-12 group-hover:text-white/[0.05] transition-colors duration-500">
+                                            FEATURED
+                                        </h2>
+                                        <span className="relative z-10 text-6xl md:text-8xl text-transparent bg-clip-text bg-gradient-to-br from-[#d4af37] to-[#b89327] drop-shadow-[0_0_30px_rgba(212,175,55,0.4)] group-hover:animate-pulse">
+                                            <FaBolt />
+                                        </span>
+                                    </>
+                                )}
                             </div>
 
                             {/* Text Section */}
@@ -164,11 +172,19 @@ const Blog = () => {
                             >
                                 <div className="absolute inset-0 bg-gradient-to-b from-[#d4af37]/10 to-transparent rounded-[2rem] blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 -z-10"></div>
 
-                                <div className="glass h-full p-8 md:p-10 rounded-[2rem] border border-white/5 hover:border-[#d4af37]/30 transition-all duration-500 flex flex-col bg-gradient-to-br from-white/[0.02] to-transparent relative overflow-hidden">
+                                <div className="glass h-full p-8 md:p-10 rounded-[2rem] border border-white/5 hover:border-[#d4af37]/30 transition-all duration-500 flex flex-col bg-gradient-to-br from-white/[0.02] to-transparent relative overflow-hidden group-hover:bg-white/[0.04]">
                                     <div className="absolute top-0 right-0 w-32 h-32 bg-white/[0.02] rounded-bl-full pointer-events-none group-hover:bg-[#d4af37]/[0.05] transition-colors duration-500"></div>
 
-                                    <div className="flex items-center justify-between mb-8 relative z-10">
-                                        <span className="text-[10px] md:text-xs font-bold uppercase tracking-wider text-[#d4af37] bg-[#d4af37]/10 border border-[#d4af37]/20 px-3 py-1.5 rounded-full">
+                                    {/* Cover Image Banner */}
+                                    {post.imageUrl && (
+                                        <div className="w-full h-48 mb-8 rounded-2xl overflow-hidden relative">
+                                            <img src={post.imageUrl} alt={post.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                                            <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0C] to-transparent opacity-80"></div>
+                                        </div>
+                                    )}
+
+                                    <div className={`flex items-center justify-between relative z-10 ${post.imageUrl ? 'mb-4 mt-[-2rem]' : 'mb-8'}`}>
+                                        <span className="text-[10px] md:text-xs font-bold uppercase tracking-wider text-[#d4af37] bg-[#d4af37]/10 border border-[#d4af37]/20 px-3 py-1.5 rounded-full backdrop-blur-md">
                                             {post.category}
                                         </span>
                                         <span className="text-gray-500 text-xs font-bold uppercase tracking-wider ml-2 text-right">{post.time}</span>

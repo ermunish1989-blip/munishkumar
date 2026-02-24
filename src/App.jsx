@@ -13,11 +13,14 @@ const ServicesPage = lazy(() => import('./pages/Services'));
 const Experience = lazy(() => import('./pages/Experience'));
 const Blog = lazy(() => import('./pages/Blog'));
 const BlogPost = lazy(() => import('./pages/BlogPost'));
+const Resources = lazy(() => import('./pages/Resources'));
 const Contact = lazy(() => import('./pages/Contact'));
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
 const AdminLogin = lazy(() => import('./pages/admin/AdminLogin'));
 const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'));
 const AdminBlogEditor = lazy(() => import('./pages/admin/AdminBlogEditor'));
+const AdminResourceEditor = lazy(() => import('./pages/admin/AdminResourceEditor'));
+const NotFound = lazy(() => import('./pages/NotFound'));
 
 // Lazy load GEO Landing Pages
 const Bahrain = lazy(() => import('./pages/locations/Bahrain'));
@@ -38,9 +41,11 @@ const PageLoader = () => (
 );
 
 import WhatsAppWidget from './components/ui/WhatsAppWidget';
+import ScrollToTopButton from './components/ui/ScrollToTop';
+import AIChatWidget from './components/ui/AIChatWidget';
 
-// Scroll to top on route change
-const ScrollToTop = () => {
+// Scroll to top on route change (Internal helper)
+const RouteScrollToTop = () => {
   const { pathname } = useLocation();
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -70,6 +75,7 @@ const MainAppLayout = () => {
                 <Route path="/experience" element={<PageTransition><Experience /></PageTransition>} />
                 <Route path="/blog" element={<PageTransition><Blog /></PageTransition>} />
                 <Route path="/blog/:slug" element={<PageTransition><BlogPost /></PageTransition>} />
+                <Route path="/resources" element={<PageTransition><Resources /></PageTransition>} />
                 <Route path="/contact" element={<PageTransition><Contact /></PageTransition>} />
                 <Route path="/privacy-policy" element={<PageTransition><PrivacyPolicy /></PageTransition>} />
 
@@ -92,6 +98,8 @@ const MainAppLayout = () => {
         </main>
         <Footer />
         <WhatsAppWidget />
+        <AIChatWidget />
+        <ScrollToTopButton />
       </div>
     </>
   );
@@ -100,13 +108,15 @@ const MainAppLayout = () => {
 function App() {
   return (
     <BrowserRouter>
-      <ScrollToTop />
+      <RouteScrollToTop />
       <Routes>
         {/* ─── Admin Routes (no Navbar/Footer) ─── */}
         <Route path="/admin" element={<Suspense fallback={<PageLoader />}><AdminLogin /></Suspense>} />
         <Route path="/admin/dashboard" element={<ProtectedRoute><Suspense fallback={<PageLoader />}><AdminDashboard /></Suspense></ProtectedRoute>} />
         <Route path="/admin/blog/new" element={<ProtectedRoute><Suspense fallback={<PageLoader />}><AdminBlogEditor /></Suspense></ProtectedRoute>} />
         <Route path="/admin/blog/edit/:id" element={<ProtectedRoute><Suspense fallback={<PageLoader />}><AdminBlogEditor /></Suspense></ProtectedRoute>} />
+        <Route path="/admin/resources/new" element={<ProtectedRoute><Suspense fallback={<PageLoader />}><AdminResourceEditor /></Suspense></ProtectedRoute>} />
+        <Route path="/admin/resources/edit/:id" element={<ProtectedRoute><Suspense fallback={<PageLoader />}><AdminResourceEditor /></Suspense></ProtectedRoute>} />
 
         {/* ─── Main Site Routes (with Navbar/Footer) ─── */}
         <Route path="/*" element={<MainAppLayout />} />

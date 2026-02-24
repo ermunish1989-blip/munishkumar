@@ -7,9 +7,9 @@ const Bahrain = () => {
     return (
         <div className="w-full bg-[#050506] relative">
             <Helmet>
-                <title>Business Advisor in Bahrain | Agency Growth Consultant Manama</title>
-                <meta name="description" content="Munish Kumar is the leading B2B Business Advisor and Agency Growth Consultant in Bahrain. Helping Manama-based digital agencies and SaaS companies scale globally." />
-                <meta name="keywords" content="Business Advisor Bahrain, Agency Growth Consultant Manama, B2B Consulting Bahrain, SaaS Scaling GCC, Business Strategy Consultant Middle East" />
+                <title>AI SEO Agency in Bahrain | Business Advisor Manama | Munish Kumar</title>
+                <meta name="description" content="Looking for an AI SEO Agency in Bahrain? Munish Kumar is a premier Business Advisor and Growth Consultant helping Manama agencies scale with AEO and NLP strategies." />
+                <meta name="keywords" content="AI SEO Agency Bahrain, Business Advisor Bahrain, Agency Growth Consultant Manama, B2B Consulting Bahrain, SaaS Scaling GCC, AEO Services Bahrain, NLP SEO Bahrain" />
                 <script type="application/ld+json">
                     {`
                     {
@@ -139,6 +139,7 @@ const Bahrain = () => {
                                 <p className="text-gray-400 font-light">My primary business address in the region is P.O. Box 23765, Manama, Kingdom of Bahrain. I conduct advisory sessions both virtually and in-person depending on client needs.</p>
                             </div>
                         </div>
+                        <p className="mt-12 text-[10px] text-gray-500 uppercase tracking-widest text-center">Last Updated: February 24, 2026</p>
                     </div>
                 </div>
             </section>

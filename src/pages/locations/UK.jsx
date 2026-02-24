@@ -7,9 +7,9 @@ const UK = () => {
     return (
         <div className="w-full bg-[#050506] relative">
             <Helmet>
-                <title>B2B Business Advisor UK | Agency Growth Consultant London & UK</title>
-                <meta name="description" content="Scale your agency or SaaS into the UK market with Munish Kumar. Strategic B2B growth consulting, out-bound sales systems, and expert Answer Engine Optimization." />
-                <meta name="keywords" content="Business Advisor UK, Agency Growth Consultant London, B2B Consulting UK, SaaS Scaling Europe, UK Market Entry Consultant" />
+                <title>AI SEO Agency in London & UK | Business Advisor | Munish Kumar</title>
+                <meta name="description" content="Scale your agency or SaaS into the UK market with an AI SEO Agency expert. Munish Kumar provides strategic B2B growth consulting and Answer Engine Optimization." />
+                <meta name="keywords" content="AI SEO Agency UK, Business Advisor UK, Agency Growth Consultant London, B2B Consulting UK, SaaS Scaling Europe, AEO Services UK, NLP SEO London" />
                 <script type="application/ld+json">
                     {`
                     {
@@ -139,6 +139,7 @@ const UK = () => {
                                 <p className="text-gray-400 font-light">By professionalizing the entire front end. We map out strict proposal guidelines, establish synchronous communication rhythms, and ensure your BD personnel communicate as peers to European project managers.</p>
                             </div>
                         </div>
+                        <p className="mt-12 text-[10px] text-gray-500 uppercase tracking-widest text-center">Last Updated: February 24, 2026</p>
                     </div>
                 </div>
             </section>

@@ -59,35 +59,36 @@ const Services = () => {
                     {services.map((service, index) => (
                         <motion.div
                             key={index}
-                            initial={{ opacity: 0, y: 50 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true, margin: "-100px" }}
-                            transition={{ duration: 0.8, delay: index * 0.2 }}
-                            whileHover={{ y: -10 }}
-                            className={`group relative h-full rounded-2xl p-[1px] bg-gradient-to-b ${service.highlight ? 'from-[#d4af37]/50 via-[#d4af37]/10 to-transparent' : 'from-white/10 to-transparent'} overflow-hidden shadow-xl`}
+                            initial={{ opacity: 0, scale: 0.95, y: 30 }}
+                            whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                            viewport={{ once: true, margin: "-50px" }}
+                            transition={{ duration: 0.6, delay: index * 0.1 }}
+                            whileHover={{ y: -12 }}
+                            className={`group relative h-full rounded-2xl p-[1px] bg-gradient-to-b ${service.highlight ? 'from-[#d4af37]/50 via-[#d4af37]/20 to-transparent' : 'from-white/10 to-transparent'} overflow-hidden shadow-2xl transition-all duration-500`}
                         >
                             {/* Inner Card content */}
-                            <div className={`relative h-full flex flex-col justify-between p-8 sm:p-10 rounded-[15px] ${service.highlight ? 'bg-[#151515]/95 shadow-[0_0_30px_rgba(212,175,55,0.1)] border-x border-b border-[#d4af37]/20' : 'bg-[#0a0a0c] border border-transparent'} backdrop-blur-xl z-10 overflow-hidden`}>
+                            <div className={`relative h-full flex flex-col justify-between p-8 sm:p-10 rounded-[15px] ${service.highlight ? 'bg-[#121214]/95 shadow-[0_20px_50px_rgba(212,175,55,0.08)] border border-[#d4af37]/10' : 'bg-[#0a0a0c] border border-white/5'} backdrop-blur-2xl z-10 overflow-hidden`}>
 
                                 {/* Background glow effect */}
-                                <div className={`absolute -top-20 -right-20 w-40 h-40 bg-gradient-to-br ${service.color} to-transparent blur-[50px] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none rounded-full`}></div>
+                                <div className={`absolute -top-24 -right-24 w-48 h-48 bg-gradient-to-br ${service.color} to-transparent blur-[70px] opacity-0 group-hover:opacity-100 transition-opacity duration-1000 pointer-events-none rounded-full`}></div>
+                                <div className={`absolute -bottom-24 -left-24 w-48 h-48 bg-gradient-to-tr ${service.color} to-transparent blur-[70px] opacity-0 group-hover:opacity-40 transition-opacity duration-1000 pointer-events-none rounded-full`}></div>
 
                                 <div className="relative z-10">
-                                    <div className="flex justify-between items-start mb-8">
-                                        <div className={`w-14 h-14 rounded-xl flex items-center justify-center border ${service.highlight ? 'bg-[#d4af37] text-[#050506] border-[#d4af37] shadow-[0_4px_20px_rgba(212,175,55,0.4)]' : 'bg-[#15151a] text-[#d4af37] border-white/10 group-hover:border-[#d4af37]/50 group-hover:shadow-[0_4px_20px_rgba(212,175,55,0.2)]'} transition-all duration-300`}>
+                                    <div className="flex justify-between items-start mb-10">
+                                        <div className={`w-16 h-16 rounded-2xl flex items-center justify-center border ${service.highlight ? 'bg-gradient-to-br from-[#d4af37] to-[#b89327] text-[#050506] border-[#d4af37] shadow-[0_10px_30px_rgba(212,175,55,0.3)]' : 'bg-[#15151a] text-[#d4af37] border-white/10 group-hover:border-[#d4af37]/30 group-hover:shadow-[0_10px_30px_rgba(212,175,55,0.15)]'} transition-all duration-500 scale-100 group-hover:scale-110`}>
                                             {service.icon}
                                         </div>
                                         {service.badge && (
-                                            <span className="text-xs font-bold uppercase tracking-wider bg-gradient-to-r from-[#d4af37] to-[#b89327] text-[#050506] py-1.5 px-3 rounded-full shadow-[0_0_10px_rgba(212,175,55,0.3)]">
+                                            <span className="text-[10px] font-bold uppercase tracking-[0.15em] bg-[#d4af37] text-[#050506] py-1.5 px-3.5 rounded-full shadow-[0_5px_15px_rgba(212,175,55,0.25)]">
                                                 {service.badge}
                                             </span>
                                         )}
                                     </div>
 
-                                    <h3 className="text-2xl font-bold text-white mb-4 font-heading group-hover:text-[#d4af37] transition-colors">
+                                    <h3 className="text-2xl font-bold text-white mb-5 font-heading group-hover:text-[#d4af37] transition-colors leading-snug">
                                         {service.title}
                                     </h3>
-                                    <p className="text-gray-400 font-light leading-relaxed mb-10 text-lg">
+                                    <p className="text-gray-400 font-light leading-relaxed mb-10 text-[17px]">
                                         {service.desc}
                                     </p>
                                 </div>
@@ -95,9 +96,13 @@ const Services = () => {
                                 <div className="mt-auto relative z-10">
                                     <Link
                                         to="/services"
-                                        className={`inline-flex items-center text-sm font-bold uppercase tracking-wider ${service.highlight ? 'text-[#d4af37]' : 'text-gray-400 group-hover:text-[#d4af37]'} transition-colors gap-2 group-hover:gap-4`}
+                                        className={`inline-flex items-center text-sm font-bold uppercase tracking-[0.2em] ${service.highlight ? 'text-[#d4af37]' : 'text-gray-400 group-hover:text-[#d4af37]'} transition-all gap-3 overflow-hidden group/link`}
                                     >
-                                        Learn More <FaArrowRight />
+                                        <span className="relative overflow-hidden inline-block">
+                                            <span className="inline-block transition-transform duration-500 group-hover/link:-translate-y-full">Learn More</span>
+                                            <span className="absolute top-0 left-0 inline-block transition-transform duration-500 translate-y-full group-hover/link:translate-y-0">Learn More</span>
+                                        </span>
+                                        <FaArrowRight className="transition-transform duration-500 group-hover/link:translate-x-2" />
                                     </Link>
                                 </div>
                             </div>

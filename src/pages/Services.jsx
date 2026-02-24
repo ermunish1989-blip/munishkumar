@@ -30,9 +30,16 @@ const ServicesPage = () => {
         {
             icon: <FaSearchDollar size={32} className="text-[#d4af37]" />,
             glowColor: "from-[#d4af37]/20 to-transparent",
-            title: "Marketing & SEO Systems",
-            desc: "Multi-channel performance marketing that actually delivers: SEO strategy and implementation, PPC campaign management, Social Media Marketing, and LinkedIn lead generation.",
-            tags: ["SEO", "PPC", "LinkedIn", "Content"]
+            title: "Advanced AI SEO & AEO Systems",
+            desc: (
+                <>
+                    Multi-channel performance marketing that leverages <strong>NLP (Natural Language Processing)</strong> and <strong>SERP</strong> intelligence. I optimize for <strong>RankBrain</strong> and modern <strong>Search Console</strong> metrics to ensure your agency dominates AI Overviews.
+                    <div className="mt-4 text-sm font-normal">
+                        Explore our hyper-local execution in the <Link to="/locations/usa" className="text-[#d4af37] underline underline-offset-4 decoration-[#d4af37]/30 hover:decoration-[#d4af37]">USA</Link>, <Link to="/locations/uk" className="text-[#d4af37] underline underline-offset-4 decoration-[#d4af37]/30 hover:decoration-[#d4af37]">UK</Link>, and <Link to="/locations/gcc" className="text-[#d4af37] underline underline-offset-4 decoration-[#d4af37]/30 hover:decoration-[#d4af37]">GCC</Link> markets.
+                    </div>
+                </>
+            ),
+            tags: ["AI SEO", "AEO", "NLP", "Google Search Console"]
         },
         {
             icon: <FaChalkboardTeacher size={32} className="text-[#d4af37]" />,
@@ -124,10 +131,20 @@ const ServicesPage = () => {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.2, duration: 0.8 }}
-                        className="text-xl md:text-2xl text-gray-300 font-light max-w-2xl mx-auto"
+                        className="text-xl md:text-2xl text-gray-300 font-light max-w-2xl mx-auto mb-16"
                     >
                         Structured consulting solutions designed to scale your business, optimize operations, and drive sustainable international revenue.
                     </motion.p>
+
+                    <motion.div
+                        initial={{ opacity: 0, y: 40 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.4, duration: 1 }}
+                        className="w-full h-64 md:h-[400px] rounded-[2rem] overflow-hidden relative border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)]"
+                    >
+                        <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=3532&auto=format&fit=crop" alt="A high-angle shot of a modern, diverse consulting team collaborating in a bright, wood-accented office space, using digital tablets and structural diagrams to plan global B2B expansion strategies." className="w-full h-full object-cover" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0C] via-transparent to-transparent opacity-80" />
+                    </motion.div>
                 </div>
             </section>
 
@@ -165,7 +182,7 @@ const ServicesPage = () => {
                                         </div>
                                     </div>
                                     <h3 className="text-2xl font-bold text-white mb-4 group-hover:text-[#d4af37] transition-colors relative z-10">{service.title}</h3>
-                                    <p className="text-gray-400 leading-relaxed font-light text-lg mb-8 flex-grow relative z-10">{service.desc}</p>
+                                    <div className="text-gray-400 leading-relaxed font-light text-lg mb-8 flex-grow relative z-10">{service.desc}</div>
 
                                     <div className="flex flex-wrap gap-2 mt-auto relative z-10 border-t border-white/5 pt-6 group-hover:border-[#d4af37]/20 transition-colors">
                                         {service.tags.map(tag => (
@@ -306,6 +323,51 @@ const ServicesPage = () => {
                             <span className="relative z-10">Book a Free Discovery Call</span>
                         </Link>
                     </motion.div>
+                </div>
+            </section>
+
+            {/* Narrative Flow FAQ Section */}
+            <section className="py-32 relative bg-[#050506] border-t border-white/5">
+                <div className="container mx-auto px-6 max-w-4xl">
+                    <motion.div
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className="text-center mb-16"
+                    >
+                        <span className="text-[#d4af37] font-heading font-medium tracking-wider text-sm uppercase mb-4 block">Information Gain</span>
+                        <h2 className="heading-lg text-white font-bold mb-6">Understanding the <span className="text-gradient">AI Search Era</span></h2>
+                        <p className="text-gray-400 text-lg font-light">Answering your most critical questions about the future of agency growth.</p>
+                    </motion.div>
+
+                    <div className="space-y-6">
+                        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="p-8 rounded-3xl bg-[#0a0a0c] border border-white/5 hover:border-[#d4af37]/20 transition-all group">
+                            <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-3">
+                                <span className="text-[#d4af37]">01.</span> What is Answer Engine Optimization (AEO)?
+                            </h3>
+                            <p className="text-gray-400 leading-relaxed font-light">
+                                Unlike traditional SEO, which focuses on ranking in blue links, <strong>AEO</strong> is the process of optimizing your content to be the definitive answer provided by AI models like ChatGPT, Perplexity, and Google Gemini. It requires high "Entity Authority" and clear, structured data.
+                            </p>
+                        </motion.div>
+
+                        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }} className="p-8 rounded-3xl bg-[#0a0a0c] border border-white/5 hover:border-[#d4af37]/20 transition-all group">
+                            <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-3">
+                                <span className="text-[#d4af37]">02.</span> How do we implement this for your agency?
+                            </h3>
+                            <p className="text-gray-400 leading-relaxed font-light">
+                                We start by mapping your agency as a "Named Entity" in the knowledge graph. Using <strong>schema.org</strong>, <strong>NLP-optimized content</strong>, and a robust internal "Semantic Web," we ensure that when an AI is asked "Who is the best B2B growth advisor?", your brand is the cited source.
+                            </p>
+                        </motion.div>
+
+                        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }} className="p-8 rounded-3xl bg-[#0a0a0c] border border-white/5 hover:border-[#d4af37]/20 transition-all group">
+                            <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-3">
+                                <span className="text-[#d4af37]">03.</span> Why does this drive better ROI than traditional ads?
+                            </h3>
+                            <p className="text-gray-400 leading-relaxed font-light">
+                                Trust is the primary currency of 2026. When an AI recommends your firm, it carries the weight of "systemic proof." This reduces the sales cycle by up to 40% because the prospect enters the discovery call already convinced of your authority.
+                            </p>
+                        </motion.div>
+                    </div>
                 </div>
             </section>
 

@@ -21,7 +21,7 @@ const Contact = () => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const FORMSPREE_ID = 'YOUR_FORMSPREE_ID'; // Replace with your actual ID from formspree.io
+    const FORMSPREE_ID = 'xqedgwqy'; // Your verified Formspree ID
 
     const handleSubmit = async (e) => {
         e.preventDefault();

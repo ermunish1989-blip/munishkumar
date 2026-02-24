@@ -120,7 +120,12 @@ const About = () => {
                         <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent z-0"></div>
                         <div className="absolute top-0 right-0 w-64 h-64 bg-[#d4af37]/10 blur-[80px] rounded-full group-hover:scale-150 transition-transform duration-1000"></div>
 
-                        <div className="relative z-10 p-10 md:p-16 space-y-8 text-lg text-gray-300 leading-relaxed font-light backdrop-blur-sm">
+                        <div className="w-full h-64 md:h-96 relative z-10 overflow-hidden rounded-t-[2rem]">
+                            <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=2940&auto=format&fit=crop" alt="A team of business professionals sitting around a modern conference table reviewing laptops and structural growth strategy notes for a digital agency scaling workshop." className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-[#050506] via-[#050506]/40 to-transparent" />
+                        </div>
+
+                        <div className="relative z-10 p-10 md:p-16 pt-0 md:pt-4 space-y-8 text-lg text-gray-300 leading-relaxed font-light backdrop-blur-sm -mt-8">
                             <p className="first-letter:text-7xl first-letter:font-bold first-letter:text-[#d4af37] first-letter:mr-3 first-letter:float-left first-letter:leading-[0.8]">
                                 I started my journey in business development in 2012 at Next Black Computers in Bahrain — managing the full BD cycle from requirements analysis through to project delivery. Over 10 years, I didn't just grow a function, I built one from scratch.
                             </p>

@@ -7,9 +7,9 @@ const India = () => {
     return (
         <div className="w-full bg-[#050506] relative">
             <Helmet>
-                <title>Business Advisor in India | Agency Growth Consultant Chandigarh</title>
-                <meta name="description" content="Munish Kumar is a top B2B Business Advisor and Agency Growth Consultant in India. Helping IT companies and SaaS founders scale globally." />
-                <meta name="keywords" content="Business Advisor India, Agency Growth Consultant Chandigarh, B2B Consulting India, SaaS Scaling India, IT Company Growth Expert" />
+                <title>AI SEO Agency in India | Business Advisor Chandigarh | Munish Kumar</title>
+                <meta name="description" content="Munish Kumar is a top AI SEO Agency expert and Business Advisor in India. Helping IT companies and SaaS founders scale with NLP and AEO strategies." />
+                <meta name="keywords" content="AI SEO Agency India, Business Advisor India, Agency Growth Consultant Chandigarh, B2B Consulting India, SaaS Scaling India, IT Company Growth Expert, AEO Services India" />
                 <script type="application/ld+json">
                     {`
                     {
@@ -139,6 +139,7 @@ const India = () => {
                                 <p className="text-gray-400 font-light">While I am highly active remotely across multiple timezones, my India office in Chandigarh serves as an operational hub. On-site team workshops and strategy sessions can be arranged depending on the scope of our engagement.</p>
                             </div>
                         </div>
+                        <p className="mt-12 text-[10px] text-gray-500 uppercase tracking-widest text-center">Last Updated: February 24, 2026</p>
                     </div>
                 </div>
             </section>

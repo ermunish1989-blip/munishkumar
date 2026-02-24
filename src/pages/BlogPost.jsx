@@ -54,11 +54,29 @@ const BlogPost = () => {
     const shareUrl = window.location.href;
     const shareTitle = encodeURIComponent(post.title);
 
+    const faqSchema = post.faq && post.faq.length > 0 ? {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": post.faq.map(item => ({
+            "@type": "Question",
+            "name": item.question,
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": item.answer
+            }
+        }))
+    } : null;
+
     return (
         <div className="bg-[#050506] min-h-screen text-white pt-32 pb-20 font-sans">
             <Helmet>
                 <title>{post.title} | Munish Kumar Blog</title>
                 <meta name="description" content={post.hook} />
+                {faqSchema && (
+                    <script type="application/ld+json">
+                        {JSON.stringify(faqSchema)}
+                    </script>
+                )}
             </Helmet>
 
             <div className="max-w-4xl mx-auto px-6 lg:px-8">
@@ -73,7 +91,14 @@ const BlogPost = () => {
                         <span className="text-xs font-bold uppercase tracking-widest text-[#050506] bg-[#d4af37] px-3 py-1.5 rounded">
                             {post.category}
                         </span>
-                        <span className="text-gray-400 text-sm">{post.time}</span>
+                        <div className="flex flex-col">
+                            <span className="text-gray-400 text-sm">{post.time} read</span>
+                            {post.updatedAt && (
+                                <span className="text-[#d4af37]/70 text-[10px] uppercase tracking-tighter font-bold">
+                                    Last Updated: {post.updatedAt}
+                                </span>
+                            )}
+                        </div>
                     </div>
                     <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold font-heading leading-tight mb-8">
                         {post.title}
@@ -106,6 +131,23 @@ const BlogPost = () => {
                     </div>
                 </header>
 
+                {/* Hero Image (Optional) */}
+                {post.imageUrl && (
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.8 }}
+                        className="w-full h-[300px] md:h-[500px] rounded-[2rem] overflow-hidden mb-16 relative border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-[#0a0a0c]"
+                    >
+                        <img
+                            src={post.imageUrl}
+                            alt={`Cover image for '${post.title}': A professional and conceptual visual depicting ${post.category} themes such as ${post.tags?.join(', ') || 'business growth'} in a high-resolution, modern aesthetic.`}
+                            className="w-full h-full object-cover"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#050506] via-transparent to-transparent opacity-80" />
+                    </motion.div>
+                )}
+
                 {/* Article Content */}
                 <motion.article
                     initial={{ opacity: 0, y: 20 }}
@@ -125,6 +167,28 @@ const BlogPost = () => {
                         pb-16 border-b border-white/10"
                     dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content || `<p>${post.hook}</p>`) }}
                 />
+
+                {/* AI / FAQ SEO Section */}
+                {post.faq && post.faq.length > 0 && (
+                    <div className="py-12 border-b border-white/10">
+                        <h3 className="text-2xl font-bold font-heading mb-8 flex items-center gap-3">
+                            <span className="text-[#d4af37]">Frequently Asked</span> Questions
+                        </h3>
+                        <div className="space-y-4">
+                            {post.faq.map((item, index) => (
+                                <details key={index} className="group bg-[#0a0a0c] border border-white/5 rounded-2xl open:bg-[#111115] open:border-[#d4af37]/30 transition-all duration-300">
+                                    <summary className="flex items-center justify-between cursor-pointer p-6 font-bold text-lg select-none list-none marker:hidden">
+                                        <span className="text-white group-hover:text-[#d4af37] transition-colors pr-6">{item.question}</span>
+                                        <span className="text-[#d4af37] text-2xl group-open:rotate-45 transition-transform duration-300 shrink-0">+</span>
+                                    </summary>
+                                    <div className="px-6 pb-6 text-gray-400 text-sm leading-relaxed border-t border-white/5 pt-4">
+                                        {item.answer}
+                                    </div>
+                                </details>
+                            ))}
+                        </div>
+                    </div>
+                )}
 
                 {/* Related Posts */}
                 {relatedPosts.length > 0 && (
