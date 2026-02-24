@@ -3,8 +3,8 @@ import { useNavigate, useParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { FaArrowLeft, FaSave, FaStar, FaExclamationTriangle } from 'react-icons/fa';
 // Dynamic import for ReactQuill to avoid build-time/init crashes
-const ReactQuill = lazy(() => import('react-quill'));
-import 'react-quill/dist/quill.snow.css';
+const ReactQuill = lazy(() => import('react-quill-new'));
+import 'react-quill-new/dist/quill.snow.css';
 import slugify from 'slugify';
 import { getBlogPosts } from '../../utils/blogStorage';
 
